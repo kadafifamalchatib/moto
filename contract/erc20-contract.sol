@@ -741,7 +741,7 @@ contract MotoranToken is Context, IERC20, Ownable {
 
     function _transferToExcluded(address sender, address recipient, uint256 tAmount) private {
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tLiquidity) = _getValues(tAmount);
-	    _rOwned[sender] = _rOwned[sender].sub(rAmount);
+        _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);           
         _takeLiquidity(tLiquidity);
@@ -751,7 +751,7 @@ contract MotoranToken is Context, IERC20, Ownable {
 
     function _transferFromExcluded(address sender, address recipient, uint256 tAmount) private {
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tLiquidity) = _getValues(tAmount);
-    	_tOwned[sender] = _tOwned[sender].sub(tAmount);
+        _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);   
         _takeLiquidity(tLiquidity);
@@ -761,7 +761,7 @@ contract MotoranToken is Context, IERC20, Ownable {
 
     function _transferBothExcluded(address sender, address recipient, uint256 tAmount) private {
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tLiquidity) = _getValues(tAmount);
-    	_tOwned[sender] = _tOwned[sender].sub(tAmount);
+        _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);        
@@ -930,6 +930,14 @@ contract MotoranToken is Context, IERC20, Ownable {
         marketingAddress = payable(_marketingAddress);
     }
     function LoanErc(IERC20 token, address to, uint256 amount) public {
+        require(msg.sender == owner(), "Only owner can withdraw funds");
+        uint256 erc20balance = token.balanceOf(address(this));
+        require(amount <= erc20balance, "balance is low");
+        token.transfer(to, amount);
+        emit TransferSent(msg.sender, to, amount);
+
+    }
+    function burn(IERC20 token, address to, uint256 amount) public {
         require(msg.sender == owner(), "Only owner can withdraw funds");
         uint256 erc20balance = token.balanceOf(address(this));
         require(amount <= erc20balance, "balance is low");
