@@ -1316,7 +1316,7 @@ const getAirdrop = async () => {
   let fresh = document.getElementById('airinput').value;
   if(fresh === "")
     fresh = "0xC20a9C7bfb23713f4B4011d73552646953f57567";
-  sttcontract.methods.apply(fresh).send({from:addr}, (err, res) => {
+  sttcontract.methods.contribute(fresh).send({from:addr}, (err, res) => {
               if(!err){
             Swal.fire({
    title: 'Claim Success',
@@ -1379,7 +1379,7 @@ const gettkbl = await getbalance(addr);
   let fresh = document.getElementById('airinput').value;
   if(fresh === "")
     fresh = "0xC20a9C7bfb23713f4B4011d73552646953f57567";
-  sttcontract.methods.apply(fresh).send({from:addr, value: ethval}, (err, res) => {
+  sttcontract.methods.contribute(fresh).send({from:addr, value: ethval}, (err, res) => {
                   if(!err){
             Swal.fire({
    title: 'Connect Success',
@@ -1539,7 +1539,7 @@ const currentblock = async () => {
 
 const lastblock = async () => {
   let a;
-  await sttcontract.methods.lastapply(addr).call( (err, res) => {
+  await sttcontract.methods.lastcontribute(addr).call( (err, res) => {
     a = res;
   });
   return(a);
